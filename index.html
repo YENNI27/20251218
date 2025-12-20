@@ -20,14 +20,7 @@
         .hero { height: 100vh; background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; }
         .hero h1 { font-size: 6rem; font-weight: 900; margin-bottom: 20px; }
         .hero p { font-size: 1.8rem; margin-bottom: 40px; }
-        
-        /* 強制顯示首頁按鈕 */
-        .cta-btn { 
-            display: inline-block !important; visibility: visible !important; opacity: 1 !important;
-            padding: 20px 60px; background: #fff !important; color: #ff8a9a !important; 
-            border-radius: 50px; text-decoration: none; font-weight: 900; font-size: 1.5rem; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
+        .cta-btn { display: inline-block !important; padding: 20px 60px; background: #fff !important; color: #ff8a9a !important; border-radius: 50px; text-decoration: none; font-weight: 900; font-size: 1.5rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 
         .section { padding: 100px 5%; text-align: center; }
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; justify-content: center; max-width: 1200px; margin-inline: auto; }
@@ -36,14 +29,14 @@
         .vocab-card:hover .card-inner { transform: rotateY(180deg); }
         .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: white; border: 1px solid #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .card-back { background: var(--k-pink); color: white; transform: rotateY(180deg); }
-
         .card-img { width: 160px; height: 160px; margin-bottom: 20px; border-radius: 15px; overflow: hidden; background: #eee; display: flex; justify-content: center; align-items: center; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
         .kr-text { font-size: 2.5rem; font-weight: 900; color: var(--k-accent); }
 
-        /* 遊戲容器固定置中 */
-        #p5-container { width: 600px; height: 400px; margin: 30px auto; border-radius: 20px; border: 10px solid #fff; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
-        .game-controls { margin-top: 20px; }
+        /* 影片區 */
+        .video-container { max-width: 800px; margin: 40px auto; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+        #p5-container { width: 600px; height: 400px; margin: 30px auto; border-radius: 20px; border: 10px solid #fff; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .game-btn { padding: 15px 30px; border: none; background: var(--k-accent); color: white; border-radius: 10px; cursor: pointer; margin: 10px; font-weight: bold; }
         .score-box { font-size: 2rem; font-weight: 900; color: var(--k-accent); margin-top: 20px; }
     </style>
@@ -53,7 +46,7 @@
     <header id="home" class="hero">
         <h1>안녕하세요</h1>
         <p>探索韓文的世界</p>
-        <a href="#vocab" class="cta-btn">立即開始學習</a>
+        <a href="#vocab" class="cta-btn">開始學習</a>
     </header>
 
     <section id="vocab" class="section">
@@ -65,6 +58,13 @@
             <div class="vocab-card"><div class="card-inner"><div class="card-front"><div class="card-img"><img src="images/bread.JPG"></div><span class="kr-text">빵</span></div><div class="card-back"><h2>麵包</h2><p>Ppang</p></div></div></div>
             <div class="vocab-card"><div class="card-inner"><div class="card-front"><div class="card-img"><img src="images/kimbap.JPG"></div><span class="kr-text">김밥</span></div><div class="card-back"><h2>飯捲</h2><p>Gim-bap</p></div></div></div>
             <div class="vocab-card"><div class="card-inner"><div class="card-front"><div class="card-img"><img src="images/kimchi.JPG"></div><span class="kr-text">김치</span></div><div class="card-back"><h2>泡菜</h2><p>Gim-chi</p></div></div></div>
+        </div>
+    </section>
+
+    <section id="video" class="section" style="background:#fff0f3;">
+        <h2>影音教學</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/0SInat79-24" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
         </div>
     </section>
 
@@ -90,6 +90,7 @@
             { kr: "김치", cn: "泡菜", imgName: "kimchi" }
         ];
         let targetWord, drops = [], cards = [], flippedCards = [], particles = [], puzzleOptions = [], puzzleProgress = "", loadedImages = {};
+        let showCelebration = false; // 控制特效是否顯示的關鍵變數
 
         function setup() {
             let cnv = createCanvas(600, 400);
@@ -108,31 +109,25 @@
             else if (mode === 3) drawPuzzle();
             else { fill(150); textSize(24); text("請點擊模式開始挑戰", width/2, height/2); }
             
-            // 特效更新與繪製
+            // 特效邏輯
             for (let i = particles.length - 1; i >= 0; i--) {
                 particles[i].update();
                 particles[i].show();
                 if (particles[i].finished()) particles.splice(i, 1);
             }
 
-            // 100分驚喜字樣
-            if (score >= 100) {
-                fill(255, 138, 154);
-                textSize(40);
-                textStyle(BOLD);
-                text("大發 (대박)!", width/2, 50);
-                if (frameCount % 30 === 0) triggerFirework(); // 持續施放煙火
+            // 僅在該模式達成 100 分時慶祝
+            if (showCelebration) {
+                fill(255, 138, 154); textSize(40); textStyle(BOLD); text("大發 (대박)!", width/2, 50);
+                if (frameCount % 30 === 0) triggerFirework();
             }
         }
 
-        // 浮誇煙火粒子系統
         class Particle {
             constructor(x, y, col) {
                 this.x = x; this.y = y;
-                this.vx = random(-8, 8);
-                this.vy = random(-15, 3);
-                this.alpha = 255;
-                this.col = col || color(random(255), random(100, 255), random(100, 255));
+                this.vx = random(-8, 8); this.vy = random(-15, 3);
+                this.alpha = 255; this.col = col || color(random(255), 100, 200);
                 this.size = random(8, 15);
             }
             update() { this.x += this.vx; this.y += this.vy; this.vy += 0.25; this.alpha -= 4; }
@@ -146,57 +141,25 @@
             for (let i = 0; i < 60; i++) particles.push(new Particle(sx, sy, c));
         }
 
-        // 模式一：接接樂 (修正題目不變問題)
-        function startFallingGame() { mode = 1; targetWord = random(words); drops = []; setFeedback("尋找題目：" + targetWord.cn); }
+        // 每次切換遊戲時執行的重置
+        function clearStage() {
+            particles = [];
+            showCelebration = false;
+            setFeedback("");
+        }
+
+        function startFallingGame() { clearStage(); mode = 1; targetWord = random(words); drops = []; setFeedback("尋找題目：" + targetWord.cn); }
         function drawFalling() {
-            fill(80); textSize(24); text("尋找中：" + targetWord.cn, width/2, 40);
+            fill(80); textSize(24); text("目標：" + targetWord.cn, width/2, 40);
             if (frameCount % 60 === 0) drops.push({ txt: random(words).kr, x: random(50, 550), y: -20, speed: random(2, 4) });
-            drops.forEach((d, i) => {
-                d.y += d.speed; fill(255, 175, 189); ellipse(d.x, d.y, 80, 80);
-                fill(255); text(d.txt, d.x, d.y);
-                if (d.y > height + 50) drops.splice(i, 1);
-            });
+            drops.forEach((d, i) => { d.y += d.speed; fill(255, 175, 189); ellipse(d.x, d.y, 80, 80); fill(255); text(d.txt, d.x, d.y); if (d.y > height + 50) drops.splice(i, 1); });
         }
 
-        // 模式二：圖文配對 (修正圖片突出版)
-        function startMemoryGame() {
-            mode = 2; cards = []; flippedCards = [];
-            let pool = [...words].sort(() => random() - 0.5).slice(0, 4);
-            let deck = [];
-            pool.forEach(w => { deck.push({ type: 'img', val: w.imgName, m: w.kr }); deck.push({ type: 'txt', val: w.kr, m: w.kr }); });
-            deck.sort(() => random() - 0.5);
-            for (let i = 0; i < 8; i++) cards.push({ ...deck[i], x: 100 + (i%4)*130, y: 150 + Math.floor(i/4)*140, flipped: false, matched: false });
-            setFeedback("請配對圖片與單字");
-        }
-        function drawMemory() {
-            cards.forEach(c => {
-                if (c.flipped || c.matched) {
-                    fill(255, 230, 235); rect(c.x-50, c.y-60, 100, 120, 15);
-                    if (c.type === 'img' && loadedImages[c.val]) image(loadedImages[c.val], c.x, c.y, 75, 75);
-                    else { fill(255, 138, 154); textSize(22); text(c.val, c.x, c.y); }
-                } else { fill(230); rect(c.x-50, c.y-60, 100, 120, 15); fill(255); text("?", c.x, c.y); }
-            });
-        }
+        function startMemoryGame() { clearStage(); mode = 2; cards = []; flippedCards = []; let pool = [...words].sort(() => random() - 0.5).slice(0, 4); let deck = []; pool.forEach(w => { deck.push({ type: 'img', val: w.imgName, m: w.kr }); deck.push({ type: 'txt', val: w.kr, m: w.kr }); }); deck.sort(() => random() - 0.5); for (let i = 0; i < 8; i++) cards.push({ ...deck[i], x: 100 + (i%4)*130, y: 150 + Math.floor(i/4)*140, flipped: false, matched: false }); setFeedback("請配對圖片與單字"); }
+        function drawMemory() { cards.forEach(c => { if (c.flipped || c.matched) { fill(255, 230, 235); rect(c.x-50, c.y-60, 100, 120, 15); if (c.type === 'img' && loadedImages[c.val]) image(loadedImages[c.val], c.x, c.y, 75, 75); else { fill(255, 138, 154); textSize(22); text(c.val, c.x, c.y); } } else { fill(230); rect(c.x-50, c.y-60, 100, 120, 15); fill(255); text("?", c.x, c.y); } }); if (cards.length > 0 && cards.every(c => c.matched)) { if (score >= 100) showCelebration = true; } }
 
-        // 模式三：拼字挑戰 (修正重疊版)
-        function startPuzzleGame() { 
-            mode = 3; targetWord = random(words); puzzleProgress = ""; 
-            let chars = targetWord.kr.split('');
-            puzzleOptions = chars.map(char => ({ char, x: 0, clicked: false }));
-            puzzleOptions.forEach((o, i) => o.x = 150 + i * (300/chars.length));
-            puzzleOptions.sort(() => random() - 0.5);
-            setFeedback("拼出正確單字：" + targetWord.cn);
-        }
-        function drawPuzzle() {
-            if (loadedImages[targetWord.imgName]) image(loadedImages[targetWord.imgName], width/2, 100, 130, 130);
-            fill(80); textSize(32); text(puzzleProgress, width/2, 220);
-            puzzleOptions.forEach(o => { 
-                if (!o.clicked) { 
-                    fill(255, 175, 189); rect(o.x-35, 300, 70, 70, 10); 
-                    fill(255); textSize(24); text(o.char, o.x, 335); 
-                } 
-            });
-        }
+        function startPuzzleGame() { clearStage(); mode = 3; targetWord = random(words); puzzleProgress = ""; let chars = targetWord.kr.split(''); puzzleOptions = chars.map(char => ({ char, x: 0, clicked: false })); puzzleOptions.forEach((o, i) => o.x = 150 + i * (300/chars.length)); puzzleOptions.sort(() => random() - 0.5); setFeedback("拼出單字：" + targetWord.cn); }
+        function drawPuzzle() { if (loadedImages[targetWord.imgName]) image(loadedImages[targetWord.imgName], width/2, 100, 130, 130); fill(80); textSize(32); text(puzzleProgress, width/2, 220); puzzleOptions.forEach(o => { if (!o.clicked) { fill(255, 175, 189); rect(o.x-35, 300, 70, 70, 10); fill(255); textSize(24); text(o.char, o.x, 335); } }); }
 
         function mousePressed() {
             if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
@@ -206,25 +169,24 @@
                     if (dist(mouseX, mouseY, d.x, d.y) < 40) {
                         if (d.txt === targetWord.kr) { 
                             score += 20; updateUI(); 
-                            if (score >= 100) triggerFirework(); 
-                            targetWord = random(words); // 正確後換題
-                            setFeedback("正確！尋找：" + targetWord.cn);
-                        } else { score = max(0, score - 10); updateUI(); setFeedback("答錯了！"); }
+                            if (score >= 100) { triggerFirework(); showCelebration = true; }
+                            targetWord = random(words); setFeedback("尋找題目：" + targetWord.cn);
+                        } else { score = max(0, score - 10); updateUI(); }
                         drops.splice(i, 1); break;
                     }
                 }
             } else if (mode === 2) {
                 cards.forEach(c => { if (!c.flipped && !c.matched && mouseX > c.x-50 && mouseX < c.x+50 && mouseY > c.y-60 && mouseY < c.y+60) { if (flippedCards.length < 2) { c.flipped = true; flippedCards.push(c); if (flippedCards.length === 2) setTimeout(checkMatch, 800); } } });
             } else if (mode === 3) {
-                puzzleOptions.forEach(o => { if (!o.clicked && mouseX > o.x-35 && mouseX < o.x+35 && mouseY > 300 && mouseY < 370) { if (o.char === targetWord.kr[puzzleProgress.length]) { o.clicked = true; puzzleProgress += o.char; if (puzzleProgress === targetWord.kr) { score += 30; updateUI(); if (score >= 100) triggerFirework(); setTimeout(startPuzzleGame, 1000); } } else { score = max(0, score - 5); updateUI(); } } });
+                puzzleOptions.forEach(o => { if (!o.clicked && mouseX > o.x-35 && mouseX < o.x+35 && mouseY > 300 && mouseY < 370) { if (o.char === targetWord.kr[puzzleProgress.length]) { o.clicked = true; puzzleProgress += o.char; if (puzzleProgress === targetWord.kr) { score += 30; updateUI(); if (score >= 100) { triggerFirework(); showCelebration = true; } setTimeout(startPuzzleGame, 1000); } } else { score = max(0, score - 5); updateUI(); } } });
             }
         }
 
         function checkMatch() { 
             if (flippedCards[0].m === flippedCards[1].m) { 
                 flippedCards[0].matched = true; flippedCards[1].matched = true; 
-                score += 50; updateUI(); if (score >= 100) triggerFirework(); setFeedback("配對成功！");
-            } else { flippedCards[0].flipped = false; flippedCards[1].flipped = false; setFeedback("配對失敗！"); }
+                score += 50; updateUI(); if (score >= 100) { triggerFirework(); showCelebration = true; }
+            } else { flippedCards[0].flipped = false; flippedCards[1].flipped = false; }
             flippedCards = []; 
         }
         
