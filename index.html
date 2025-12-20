@@ -11,57 +11,54 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Noto Sans KR', 'Noto Sans TC', sans-serif; background-color: var(--k-bg); color: #444; scroll-behavior: smooth; }
         
-        /* 導覽列 */
-        nav { position: fixed; width: 100%; top: 0; background: rgba(255,255,255,0.95); padding: 15px 10%; display: flex; justify-content: space-between; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        nav { position: fixed; width: 100%; top: 0; background: rgba(255,255,255,0.98); padding: 15px 10%; display: flex; justify-content: space-between; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .logo { font-weight: bold; color: var(--k-accent); font-size: 1.5rem; }
         nav ul { display: flex; list-style: none; }
         nav ul li { margin-left: 20px; }
         nav ul li a { text-decoration: none; color: #666; font-weight: bold; }
 
-        /* 英雄區 */
+        /* 英雄區 & 修正後的按鈕 */
         .hero { height: 100vh; background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; }
-        .hero h1 { font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; margin-bottom: 10px; text-shadow: 4px 4px 0px rgba(255, 138, 154, 0.4); }
-        .hero p { font-size: 1.5rem; margin-bottom: 40px; }
-
-        /* 單字卡區塊：加強置中與圖片容器 */
-        .section { padding: 100px 10%; text-align: center; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-top: 40px; justify-content: center; }
+        .hero h1 { font-size: clamp(4rem, 12vw, 8rem); font-weight: 900; margin-bottom: 20px; text-shadow: 4px 4px 0px rgba(255, 138, 154, 0.4); }
+        .hero p { font-size: 1.8rem; margin-bottom: 50px; }
         
-        .vocab-card { height: 320px; perspective: 1000px; cursor: pointer; margin: 0 auto; width: 100%; max-width: 250px; }
+        .cta-btn { 
+            padding: 18px 50px; background: #fff; color: var(--k-accent); 
+            border-radius: 50px; text-decoration: none; font-weight: 900; 
+            font-size: 1.4rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            transition: 0.3s; display: block; visibility: visible !important;
+        }
+        .cta-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+
+        /* 單字卡佈局 */
+        .section { padding: 100px 5%; text-align: center; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 35px; margin-top: 50px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+        .vocab-card { width: 240px; height: 320px; perspective: 1000px; cursor: pointer; margin: 0 auto; }
         .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
         .vocab-card:hover .card-inner { transform: rotateY(180deg); }
-        
-        .card-front, .card-back { 
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            border-radius: 20px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 2px solid #eee; padding: 20px;
-        }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 25px; background: white; box-shadow: 0 8px 20px rgba(0,0,0,0.06); border: 1px solid #eee; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .card-back { background: var(--k-pink); color: white; transform: rotateY(180deg); }
 
-        /* 圖片容器修正：強制 1:1 比例且內容居中 */
+        /* 圖片絕對置中 */
         .card-img { 
-            width: 140px; height: 140px; margin-bottom: 15px; border-radius: 15px; 
-            overflow: hidden; background: #f9f9f9; display: flex; justify-content: center; align-items: center;
+            width: 150px; height: 150px; margin-bottom: 20px; 
+            border-radius: 50%; overflow: hidden; background: #f5f5f5; 
+            display: flex; justify-content: center; align-items: center; 
+            border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-        .card-img img { 
-            width: 100%; height: 100%; object-fit: cover; /* 關鍵：確保圖片填滿不變形 */
-            display: block; 
-        }
-        .kr-text { font-size: 2rem; font-weight: bold; color: var(--k-accent); }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+        .kr-text { font-size: 2.4rem; font-weight: 900; color: var(--k-accent); }
 
-        /* 遊戲與影片區 */
-        .video-container { max-width: 800px; margin: 40px auto; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        #p5-container { width: 600px; height: 400px; margin: 20px auto; border-radius: 20px; border: 8px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); background: #fff; }
-        .game-btn { padding: 12px 24px; border: none; background: var(--k-accent); color: white; border-radius: 12px; cursor: pointer; margin: 5px; font-weight: bold; }
-        .score-box { font-size: 1.8rem; font-weight: bold; margin: 20px 0; color: var(--k-accent); }
+        #p5-container { width: 600px; height: 400px; margin: 30px auto; border-radius: 20px; border: 10px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.1); background: #fff; }
+        .game-btn { padding: 14px 28px; border: none; background: var(--k-accent); color: white; border-radius: 12px; cursor: pointer; margin: 8px; font-weight: bold; font-size: 1.1rem; }
     </style>
 </head>
 <body>
     <nav><div class="logo">K-Learn.</div><ul><li><a href="#home">首頁</a></li><li><a href="#vocab">單字卡</a></li><li><a href="#video">影片</a></li><li><a href="#game">挑戰</a></li></ul></nav>
-    <header id="home" class="hero"><h1>안녕하세요</h1><p>全方位韓文互動挑戰</p></header>
+    <header id="home" class="hero"><h1>안녕하세요</h1><p>全方位韓文互動挑戰</p><a href="#vocab" class="cta-btn">開始學習</a></header>
 
     <section id="vocab" class="section">
-        <h2 style="font-size: 2.5rem; color: var(--k-accent);">基礎生活單字</h2>
+        <h2 style="font-size: 2.8rem; color: var(--k-accent);">基礎生活單字</h2>
         <div class="vocab-grid">
             <div class="vocab-card"><div class="card-inner"><div class="card-front"><div class="card-img"><img src="images/apple.JPG" alt="apple"></div><span class="kr-text">사과</span></div><div class="card-back"><h2>蘋果</h2><p>Sa-gwa</p></div></div></div>
             <div class="vocab-card"><div class="card-inner"><div class="card-front"><div class="card-img"><img src="images/milk.JPG" alt="milk"></div><span class="kr-text">우유</span></div><div class="card-back"><h2>牛奶</h2><p>U-yu</p></div></div></div>
@@ -72,21 +69,14 @@
         </div>
     </section>
 
-    <section id="video" class="section" style="background: #fdf2f4;">
-        <h2 style="font-size: 2.5rem; color: var(--k-accent);">影音教學</h2>
-        <div class="video-container"><iframe src="https://www.youtube.com/embed/gCAaO9Gy6dQ?si=ZZ3f-f38yKtyTkFT" width="100%" height="100%" frameborder="0" allowfullscreen></iframe></div>
-    </section>
+    <section id="video" class="section" style="background: #fdf2f4;"><h2 style="font-size: 2.8rem; color: var(--k-accent);">影音教學</h2><div class="video-container"><iframe src="https://www.youtube.com/embed/0SInat79-24" width="100%" height="100%" frameborder="0" allowfullscreen></iframe></div></section>
 
     <section id="game" class="section">
-        <h2 style="font-size: 2.5rem; color: var(--k-accent);">成果測驗遊戲</h2>
-        <div class="game-controls">
-            <button class="game-btn" onclick="startFallingGame()">模式一：接接樂</button>
-            <button class="game-btn" onclick="startMemoryGame()">模式二：圖文配對</button>
-            <button class="game-btn" onclick="startPuzzleGame()">模式三：拼字挑戰</button>
-        </div>
+        <h2 style="font-size: 2.8rem; color: var(--k-accent);">成果測驗遊戲</h2>
+        <div class="game-controls"><button class="game-btn" onclick="startFallingGame()">模式一：接接樂</button><button class="game-btn" onclick="startMemoryGame()">模式二：圖文配對</button><button class="game-btn" onclick="startPuzzleGame()">模式三：拼字挑戰</button></div>
         <div id="p5-container"></div>
         <div class="score-box">得分：<span id="score-val">0</span></div>
-        <div id="game-feedback" class="feedback">點擊模式按鈕開始挑戰！</div>
+        <div id="game-feedback" class="feedback" style="font-size: 1.3rem; font-weight: bold; color: #555;">選個模式開始吧！</div>
     </section>
 
     <script>
@@ -105,6 +95,7 @@
             cnv.parent('p5-container');
             textAlign(CENTER, CENTER);
             words.forEach(w => {
+                // 遊戲內也同步更新為大寫 .JPG
                 loadImage('images/' + w.imgName + '.JPG', img => loadedImages[w.imgName] = img);
             });
         }
@@ -114,7 +105,7 @@
             if (mode === 1) drawFalling();
             else if (mode === 2) drawMemory();
             else if (mode === 3) drawPuzzle();
-            else { fill(180); textSize(22); text("請選擇遊戲開始挑戰", width/2, height/2); }
+            else { fill(180); textSize(24); text("請選擇遊戲開始挑戰", width/2, height/2); }
             for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); particles[i].show(); if (particles[i].finished()) particles.splice(i, 1); }
         }
 
@@ -151,9 +142,8 @@
             cards.forEach(c => {
                 if (c.flipped || c.matched) {
                     fill(255, 230, 235); rect(c.x-50, c.y-60, 100, 120, 15);
-                    if (c.type === 'img') {
-                        if (loadedImages[c.val]) image(loadedImages[c.val], c.x, c.y, 80, 80);
-                    } else { fill(255, 138, 154); textSize(22); text(c.val, c.x, c.y); }
+                    if (c.type === 'img' && loadedImages[c.val]) image(loadedImages[c.val], c.x, c.y, 80, 80);
+                    else if (c.type === 'txt') { fill(255, 138, 154); textSize(22); text(c.val, c.x, c.y); }
                 } else { fill(230); rect(c.x-50, c.y-60, 100, 120, 15); fill(255); textSize(35); text("?", c.x, c.y); }
             });
             if (cards.length > 0 && cards.every(c => c.matched) && score >= 100 && frameCount % 15 === 0) triggerMegaFirework();
