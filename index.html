@@ -11,21 +11,21 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Noto Sans KR', 'Noto Sans TC', sans-serif; background-color: var(--k-bg); color: #444; scroll-behavior: smooth; }
         
-        /* 導覽列 */
-        nav { position: fixed; width: 100%; top: 0; background: #fff; padding: 15px 10%; display: flex; justify-content: space-between; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        nav { position: fixed; width: 100%; top: 0; background: #fff; padding: 15px 10%; display: flex; justify-content: space-between; z-index: 2000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo { font-weight: bold; color: var(--k-accent); font-size: 1.5rem; }
         nav ul { display: flex; list-style: none; }
         nav ul li { margin-left: 20px; }
         nav ul li a { text-decoration: none; color: #666; font-weight: bold; }
 
-        /* 英雄區 - 移除所有可能導致按鈕不見的動畫 */
+        /* 首頁按鈕 100% 顯示保障 */
         .hero { height: 100vh; background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; }
-        .hero h1 { font-size: 6rem; font-weight: 900; margin-bottom: 20px; text-shadow: 3px 3px 0px rgba(0,0,0,0.1); }
+        .hero h1 { font-size: 6rem; font-weight: 900; margin-bottom: 20px; }
         .hero p { font-size: 1.8rem; margin-bottom: 40px; }
         
-        /* 強化按鈕顯示 */
         .cta-btn { 
             display: inline-block !important; 
+            visibility: visible !important;
+            opacity: 1 !important;
             padding: 20px 60px; 
             background: #ffffff !important; 
             color: #ff8a9a !important; 
@@ -34,40 +34,24 @@
             font-weight: 900; 
             font-size: 1.5rem; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            opacity: 1 !important;
-            visibility: visible !important;
+            transition: transform 0.2s;
         }
+        .cta-btn:hover { transform: scale(1.05); }
 
-        /* 單字卡區塊 - 確保圖片絕對置中 */
+        /* 單字卡佈局修正 */
         .section { padding: 100px 5%; text-align: center; }
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; justify-content: center; max-width: 1200px; margin-inline: auto; }
-        
         .vocab-card { width: 250px; height: 350px; perspective: 1000px; cursor: pointer; margin: 0 auto; }
         .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
         .vocab-card:hover .card-inner { transform: rotateY(180deg); }
-        
-        .card-front, .card-back { 
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
-            border-radius: 20px; background: white; border: 1px solid #ddd;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;
-        }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; background: white; border: 1px solid #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .card-back { background: var(--k-pink); color: white; transform: rotateY(180deg); }
 
-        /* 圖片容器 - 修正位置歪斜 */
-        .card-img { 
-            width: 160px; height: 160px; 
-            margin-bottom: 20px; border-radius: 15px; 
-            overflow: hidden; background: #eee;
-            display: flex !important; justify-content: center !important; align-items: center !important;
-        }
-        .card-img img { 
-            width: 100% !important; height: 100% !important; 
-            object-fit: cover !important; /* 確保不歪斜填滿 */
-            display: block;
-        }
+        .card-img { width: 160px; height: 160px; margin-bottom: 20px; border-radius: 15px; overflow: hidden; background: #eee; display: flex; justify-content: center; align-items: center; }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; }
         .kr-text { font-size: 2.5rem; font-weight: 900; color: var(--k-accent); }
 
-        /* 遊戲區 */
+        /* 遊戲容器 */
         #p5-container { width: 600px; height: 400px; margin: 30px auto; border-radius: 20px; border: 10px solid #fff; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .game-btn { padding: 15px 30px; border: none; background: var(--k-accent); color: white; border-radius: 10px; cursor: pointer; margin: 10px; font-weight: bold; }
     </style>
@@ -92,14 +76,16 @@
         </div>
     </section>
 
-    <section id="video" class="section" style="background:#fff0f3;"><h2>影音教學</h2><div class="video-container"><iframe src="https://www.youtube.com/embed/0SInat79-24" width="100%" height="450px" frameborder="0" allowfullscreen></iframe></div></section>
-
     <section id="game" class="section">
         <h2>測驗挑戰</h2>
-        <div class="game-controls"><button class="game-btn" onclick="startFallingGame()">模式一</button><button class="game-btn" onclick="startMemoryGame()">模式二</button><button class="game-btn" onclick="startPuzzleGame()">模式三</button></div>
+        <div class="game-controls">
+            <button class="game-btn" onclick="startFallingGame()">模式一</button>
+            <button class="game-btn" onclick="startMemoryGame()">模式二</button>
+            <button class="game-btn" onclick="startPuzzleGame()">模式三</button>
+        </div>
         <div id="p5-container"></div>
         <div class="score-box">得分：<span id="score-val">0</span></div>
-        <div id="game-feedback"></div>
+        <div id="game-feedback" style="font-weight:bold; color:var(--k-accent);"></div>
     </section>
 
     <script>
@@ -117,6 +103,7 @@
             let cnv = createCanvas(600, 400);
             cnv.parent('p5-container');
             textAlign(CENTER, CENTER);
+            imageMode(CENTER); // 確保圖片中心定位
             words.forEach(w => {
                 loadImage('images/' + w.imgName + '.JPG', img => loadedImages[w.imgName] = img);
             });
@@ -127,19 +114,11 @@
             if (mode === 1) drawFalling();
             else if (mode === 2) drawMemory();
             else if (mode === 3) drawPuzzle();
-            else { fill(150); textSize(20); text("請選擇遊戲開始", width/2, height/2); }
+            else { fill(150); textSize(20); text("請選擇遊戲模式開始", width/2, height/2); }
             for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); particles[i].show(); if (particles[i].finished()) particles.splice(i, 1); }
         }
 
-        class Particle {
-            constructor(x, y, c) { this.x = x; this.y = y; this.vx = random(-5, 5); this.vy = random(-10, 2); this.alpha = 255; this.color = c || color(random(255), 100, 200); }
-            update() { this.x += this.vx; this.y += this.vy; this.vy += 0.2; this.alpha -= 5; }
-            show() { noStroke(); fill(red(this.color), green(this.color), blue(this.color), this.alpha); ellipse(this.x, this.y, 10); }
-            finished() { return this.alpha < 0; }
-        }
-
-        function triggerFire() { let sx = random(100, 500), sy = random(100, 200); for (let i = 0; i < 100; i++) particles.push(new Particle(sx, sy)); }
-
+        // 模式一：接接樂
         function startFallingGame() { mode = 1; score = 0; updateUI(); targetWord = random(words); drops = []; setFeedback("尋找：" + targetWord.cn); }
         function drawFalling() {
             fill(80); textSize(24); text(targetWord.cn, width/2, 40);
@@ -147,6 +126,7 @@
             drops.forEach((d, i) => { d.y += d.speed; fill(255, 175, 189); ellipse(d.x, d.y, 80, 80); fill(255); text(d.txt, d.x, d.y); if (d.y > height + 50) drops.splice(i, 1); });
         }
 
+        // 模式二：圖文配對 (修正圖片尺寸)
         function startMemoryGame() {
             mode = 2; score = 0; updateUI(); cards = []; flippedCards = [];
             let pool = [...words].sort(() => random() - 0.5).slice(0, 4);
@@ -154,32 +134,51 @@
             pool.forEach(w => { deck.push({ type: 'img', val: w.imgName, m: w.kr }); deck.push({ type: 'txt', val: w.kr, m: w.kr }); });
             deck.sort(() => random() - 0.5);
             for (let i = 0; i < 8; i++) cards.push({ ...deck[i], x: 100 + (i%4)*130, y: 130 + Math.floor(i/4)*150, flipped: false, matched: false });
+            setFeedback("將圖片與單字配對");
         }
         function drawMemory() {
             cards.forEach(c => {
                 if (c.flipped || c.matched) {
                     fill(255, 230, 235); rect(c.x-50, c.y-60, 100, 120, 10);
-                    if (c.type === 'img' && loadedImages[c.val]) image(loadedImages[c.val], c.x, c.y, 80, 80);
-                    else { fill(255, 138, 154); text(c.val, c.x, c.y); }
+                    if (c.type === 'img' && loadedImages[c.val]) {
+                        image(loadedImages[c.val], c.x, c.y, 70, 70); // 嚴格限制圖片在方框內
+                    } else { fill(255, 138, 154); text(c.val, c.x, c.y); }
                 } else { fill(230); rect(c.x-50, c.y-60, 100, 120, 10); fill(255); text("?", c.x, c.y); }
             });
-            if (cards.length > 0 && cards.every(c => c.matched) && frameCount % 20 === 0) triggerFire();
         }
 
-        function startPuzzleGame() { mode = 3; score = 0; updateUI(); targetWord = random(words); puzzleProgress = ""; puzzleOptions = targetWord.kr.split('').map(char => ({ char, x: 0, clicked: false })); puzzleOptions.forEach((o, i) => o.x = 150 + i * 100); puzzleOptions.sort(() => random() - 0.5); }
+        // 模式三：拼字挑戰 (修正重疊)
+        function startPuzzleGame() { 
+            mode = 3; score = 0; updateUI(); 
+            targetWord = random(words); 
+            puzzleProgress = ""; 
+            let chars = targetWord.kr.split('');
+            puzzleOptions = chars.map(char => ({ char, x: 0, clicked: false }));
+            puzzleOptions.forEach((o, i) => o.x = 150 + i * (300/chars.length));
+            puzzleOptions.sort(() => random() - 0.5);
+            setFeedback("拼出：" + targetWord.cn);
+        }
         function drawPuzzle() {
-            if (loadedImages[targetWord.imgName]) image(loadedImages[targetWord.imgName], width/2, 120, 150, 150);
-            text(puzzleProgress, width/2, 240);
-            puzzleOptions.forEach(o => { if (!o.clicked) { fill(255, 175, 189); rect(o.x-30, 310, 60, 60, 10); fill(255); text(o.char, o.x, 340); } });
+            if (loadedImages[targetWord.imgName]) image(loadedImages[targetWord.imgName], width/2, 100, 140, 140); // 圖片上移
+            fill(80); textSize(30); text(puzzleProgress, width/2, 220); // 文字下移
+            puzzleOptions.forEach(o => { 
+                if (!o.clicked) { 
+                    fill(255, 175, 189); rect(o.x-35, 300, 70, 70, 10); // 方塊固定在底部區域
+                    fill(255); textSize(24); text(o.char, o.x, 335); 
+                } 
+            });
         }
 
         function mousePressed() {
             if (mode === 1) { drops.forEach((d, i) => { if (dist(mouseX, mouseY, d.x, d.y) < 40) { if (d.txt === targetWord.kr) { score += 20; if (score >= 100) triggerFire(); targetWord = random(words); } drops.splice(i, 1); updateUI(); } }); }
             else if (mode === 2) { cards.forEach(c => { if (!c.flipped && !c.matched && mouseX > c.x-50 && mouseX < c.x+50 && mouseY > c.y-60 && mouseY < c.y+60) { if (flippedCards.length < 2) { c.flipped = true; flippedCards.push(c); if (flippedCards.length === 2) setTimeout(checkMatch, 800); } } }); }
-            else if (mode === 3) { puzzleOptions.forEach(o => { if (!o.clicked && mouseX > o.x-30 && mouseX < o.x+30 && mouseY > 280 && mouseY < 340) { if (o.char === targetWord.kr[puzzleProgress.length]) { o.clicked = true; puzzleProgress += o.char; if (puzzleProgress === targetWord.kr) { score += 30; if (score >= 100) triggerFire(); setTimeout(startPuzzleGame, 1000); } } updateUI(); } }); }
+            else if (mode === 3) { puzzleOptions.forEach(o => { if (!o.clicked && mouseX > o.x-35 && mouseX < o.x+35 && mouseY > 300 && mouseY < 370) { if (o.char === targetWord.kr[puzzleProgress.length]) { o.clicked = true; puzzleProgress += o.char; if (puzzleProgress === targetWord.kr) { score += 30; if (score >= 100) triggerFire(); setTimeout(startPuzzleGame, 1000); } } updateUI(); } }); }
         }
 
         function checkMatch() { if (flippedCards[0].m === flippedCards[1].m) { flippedCards[0].matched = true; flippedCards[1].matched = true; score += 50; if (score >= 100) triggerFire(); } else { flippedCards[0].flipped = false; flippedCards[1].flipped = false; } flippedCards = []; updateUI(); }
+        
+        class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = random(-5, 5); this.vy = random(-10, 2); this.alpha = 255; } update() { this.x += this.vx; this.y += this.vy; this.vy += 0.2; this.alpha -= 5; } show() { noStroke(); fill(255, 138, 154, this.alpha); ellipse(this.x, this.y, 10); } finished() { return this.alpha < 0; } }
+        function triggerFire() { let sx = random(100, 500), sy = random(100, 200); for (let i = 0; i < 100; i++) particles.push(new Particle(sx, sy)); }
         function updateUI() { document.getElementById('score-val').innerText = score; }
         function setFeedback(msg) { document.getElementById('game-feedback').innerText = msg; }
     </script>
