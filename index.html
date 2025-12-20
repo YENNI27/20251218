@@ -87,7 +87,7 @@
             textAlign(CENTER, CENTER);
             // 改在 setup 之後非同步讀取圖片
             words.forEach(w => {
-                let imgPath = 'images/' + w.imgName + '.jpg';
+                let imgPath = 'images/' + w.imgName + '.JPG';
                 loadImage(imgPath, img => loadedImages[w.imgName] = img, () => console.log(w.imgName + " 載入失敗"));
             });
         }
